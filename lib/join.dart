@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class LeaveButton extends StatelessWidget {
+class JoinButton extends StatelessWidget {
   final Function()? onPressed;
-  final String leaveText;
 
-  const LeaveButton({Key? key, required this.leaveText, this.onPressed}) : super(key: key);
+  const JoinButton({Key? key, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +19,10 @@ class LeaveButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(FontAwesomeIcons.arrowLeft, color: Colors.black, size: 18),
+            Icon(FontAwesomeIcons.rightToBracket, color: Colors.black, size: 18),
             SizedBox(width: 5),
             Text(
-              leaveText,
+              'Join',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 18,

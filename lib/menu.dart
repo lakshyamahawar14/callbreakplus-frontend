@@ -31,6 +31,9 @@ class Menu extends StatelessWidget {
         Links(
           icon: FontAwesomeIcons.userFriends,
           title: 'Local',
+          onTap: () {
+            Navigator.pushNamed(context, '/local');
+          },
         ),
         Links(
           icon: FontAwesomeIcons.cogs,

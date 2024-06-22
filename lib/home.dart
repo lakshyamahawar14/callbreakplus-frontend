@@ -21,14 +21,16 @@ class HomePage extends StatelessWidget {
             child: Menu(),
           ),
           Expanded(
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Call Break Plus',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                child: Text(
+                  'Call Break Plus',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ),

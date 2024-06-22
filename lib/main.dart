@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home.dart';
 import 'multiplayer.dart';
+import 'local.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
         '/multiplayer': (context) => Multiplayer(),
+        '/local': (context) => Local(),
       },
     );
   }
