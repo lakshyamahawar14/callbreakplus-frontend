@@ -98,7 +98,7 @@ class Local extends StatelessWidget {
                         TextSpan(
                           text: 'Click here',
                           style: TextStyle(
-                            color: AppColors.linkColor,
+                            color: Colors.blue,
                           ),
                         ),
                       ],

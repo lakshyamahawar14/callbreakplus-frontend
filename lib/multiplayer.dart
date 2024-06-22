@@ -95,7 +95,7 @@ class Multiplayer extends StatelessWidget {
                         TextSpan(
                           text: 'Join here',
                           style: TextStyle(
-                            color: AppColors.linkColor,
+                            color: Colors.blue,
                           ),
                         ),
                       ],

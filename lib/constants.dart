@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color backgroundColor = Color(0xFFC0FFC0);
-  static const Color textColor = Colors.black;
-  static const Color linkColor = Colors.blue;
+  static const Color homeColor = Color(0xFF418076);
+  static const Color backgroundColor = Color(0xFF90F073);
 }

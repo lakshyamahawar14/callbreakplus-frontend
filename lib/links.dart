@@ -16,7 +16,7 @@ class Links extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         padding: const EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: Color(0xFFC0FFC0),
+          color: Color(0xFF90F073),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(

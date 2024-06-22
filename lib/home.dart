@@ -8,7 +8,7 @@ class HomePage extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.backgroundColor,
+        color: AppColors.homeColor,
       ),
       child: Row(
         children: [
@@ -31,6 +31,7 @@ class HomePage extends StatelessWidget {
                     fontFamily: 'Poppins',
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
+                    color: Color(0xFFFEFFE3),
                   ),
                 ),
               ),
