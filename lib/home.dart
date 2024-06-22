@@ -1,16 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'menu.dart';
 import 'constants.dart';
 import 'button.dart';
+import 'status.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController _controller = TextEditingController();
+  String playerName = '';
+  bool showError = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _setPlayerName() async {
+    setState(() {
+      playerName = _controller.text.trim();
+      if (playerName.isNotEmpty) {
+        showError = false;
+        _createSession(playerName); // Call the function to create a session
+      } else {
+        showError = true;
+      }
+    });
+  }
+
+  Future<void> _createSession(String name) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:8080/api/session/create?name=$name'),
+    );
+
+    if (response.statusCode == 200) {
+      print('Response data: ${response.body}');
+    } else {
+      print('Failed to create session');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double menuWidth = 200;
+    const double menuWidth = 200;
     final double containerWidth = screenWidth - menuWidth - 30;
 
     return Container(
@@ -33,9 +74,9 @@ class HomePage extends StatelessWidget {
             width: containerWidth,
             padding: const EdgeInsets.all(0),
             alignment: Alignment.center,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
               ),
@@ -45,7 +86,7 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Call Break Plus',
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -55,26 +96,74 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Container(
-                    width: containerWidth * 0.5,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Enter Your Name',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(12),
+                  Visibility(
+                    visible: playerName.isEmpty,
+                    child: Container(
+                      width: containerWidth * 0.5,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: TextField(
+                        controller: _controller,
+                        onSubmitted: (_) => _setPlayerName(),
+                        decoration: const InputDecoration(
+                          hintText: 'Enter Your Name',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(12),
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Button(
-                    icon: FontAwesomeIcons.rightToBracket,
-                    buttonText: "Enter",
-                    onPressed: () {
-                    },
+                  Visibility(
+                    visible: playerName.isEmpty,
+                    child: Button(
+                      icon: FontAwesomeIcons.rightToBracket,
+                      buttonText: "Enter",
+                      onPressed: () {
+                        if (_controller.text.trim().isNotEmpty) {
+                          _setPlayerName();
+                        } else {
+                          setState(() {
+                            showError = true;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: playerName.isEmpty && showError,
+                    child: const SizedBox(height: 10),
+                  ),
+                  Visibility(
+                    visible: playerName.isEmpty && showError,
+                    child: const Status(
+                      message: "*Please enter a valid name",
+                      color: AppColors.redColor,
+                    ),
+                  ),
+                  Visibility(
+                    visible: playerName.isNotEmpty,
+                    child: RichText(
+                      text: TextSpan(
+                        text: 'Welcome, ',
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '$playerName!',
+                            style: const TextStyle(
+                              color: AppColors.greenColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
