@@ -4,13 +4,15 @@ import 'button.dart';
 import 'constants.dart';
 
 class Local extends StatelessWidget {
+  const Local({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
+        margin: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
           color: AppColors.backgroundColor,
         ),
         child: Column(
@@ -18,7 +20,7 @@ class Local extends StatelessWidget {
           children: [
             Container(
               height: MediaQuery.of(context).size.height * 0.2,
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -32,7 +34,7 @@ class Local extends StatelessWidget {
                       },
                     ),
                   ),
-                  Center(
+                  const Center(
                     child: Text(
                       'Join Room',
                       style: TextStyle(
@@ -58,7 +60,7 @@ class Local extends StatelessWidget {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: TextField(
+                        child: const TextField(
                           decoration: InputDecoration(
                             hintText: 'Enter Room ID',
                             border: InputBorder.none,
@@ -66,7 +68,7 @@ class Local extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Button(
                         icon: FontAwesomeIcons.rightToBracket,
                         buttonText: "Join",
@@ -78,7 +80,7 @@ class Local extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.2,
               child: Center(
                 child: GestureDetector(
@@ -86,7 +88,7 @@ class Local extends StatelessWidget {
                     Navigator.of(context).pushReplacementNamed('/multiplayer');
                   },
                   child: RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       text: 'Play with random people. ',
                       style: TextStyle(
                         fontFamily: 'Poppins',

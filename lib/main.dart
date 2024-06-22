@@ -11,25 +11,27 @@ void main() {
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
   ]).then((_) {
-    runApp(MyApp());
+    runApp(const MyApp());
   });
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => FullScreenWidget(
+        '/': (context) => const FullScreenWidget(
               child: Scaffold(
                 backgroundColor: Colors.white,
                 body: HomePage(),
               ),
             ),
-        '/multiplayer': (context) => Multiplayer(),
-        '/local': (context) => Local(),
+        '/multiplayer': (context) => const Multiplayer(),
+        '/local': (context) => const Local(),
       },
     );
   }
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
 class FullScreenWidget extends StatefulWidget {
   final Widget child;
 
-  const FullScreenWidget({Key? key, required this.child}) : super(key: key);
+  const FullScreenWidget({super.key, required this.child});
 
   @override
   _FullScreenWidgetState createState() => _FullScreenWidgetState();

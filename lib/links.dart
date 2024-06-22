@@ -6,7 +6,7 @@ class Links extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;
 
-  const Links({required this.icon, required this.title, this.onTap});
+  const Links({super.key, required this.icon, required this.title, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +16,16 @@ class Links extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         padding: const EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: Color(0xFF90F073),
+          color: const Color(0xFF90F073),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
             FaIcon(icon, size: 18),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

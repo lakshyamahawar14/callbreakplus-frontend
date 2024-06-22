@@ -4,13 +4,15 @@ import 'package:flutter/services.dart';
 import 'links.dart';
 
 class Menu extends StatelessWidget {
+  const Menu({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
+        const Padding(
+          padding: EdgeInsets.all(20.0),
           child: Text(
             'Menu',
             style: TextStyle(
@@ -20,7 +22,7 @@ class Menu extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Links(
           icon: FontAwesomeIcons.users,
           title: 'Multiplayer',
@@ -35,7 +37,7 @@ class Menu extends StatelessWidget {
             Navigator.pushNamed(context, '/local');
           },
         ),
-        Links(
+        const Links(
           icon: FontAwesomeIcons.cogs,
           title: 'Settings',
         ),

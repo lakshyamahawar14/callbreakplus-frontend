@@ -5,17 +5,17 @@ class CardWidget extends StatelessWidget {
   final double cardHeight;
 
   const CardWidget({
-    Key? key,
+    super.key,
     required this.cardWidth,
     required this.cardHeight,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: cardWidth,
       height: cardHeight,
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -24,7 +24,7 @@ class CardWidget extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 3,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),

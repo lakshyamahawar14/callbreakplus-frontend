@@ -5,6 +5,8 @@ import 'card.dart';
 import 'constants.dart';
 
 class Multiplayer extends StatelessWidget {
+  const Multiplayer({super.key});
+
   @override
   Widget build(BuildContext context) {
     double cardWidth;
@@ -13,8 +15,8 @@ class Multiplayer extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
+        margin: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
           color: AppColors.backgroundColor,
         ),
         child: Column(
@@ -22,7 +24,7 @@ class Multiplayer extends StatelessWidget {
           children: [
             Container(
               height: MediaQuery.of(context).size.height * 0.2,
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -36,7 +38,7 @@ class Multiplayer extends StatelessWidget {
                       },
                     ),
                   ),
-                  Center(
+                  const Center(
                     child: Text(
                       'Finding Room...',
                       style: TextStyle(
@@ -63,11 +65,11 @@ class Multiplayer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CardWidget(cardWidth: cardWidth, cardHeight: cardHeight),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         CardWidget(cardWidth: cardWidth, cardHeight: cardHeight),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         CardWidget(cardWidth: cardWidth, cardHeight: cardHeight),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         CardWidget(cardWidth: cardWidth, cardHeight: cardHeight),
                       ],
                     );
@@ -75,7 +77,7 @@ class Multiplayer extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.2,
               child: Center(
                 child: GestureDetector(
@@ -83,7 +85,7 @@ class Multiplayer extends StatelessWidget {
                     Navigator.of(context).pushReplacementNamed('/local');
                   },
                   child: RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       text: 'Have a room ID? ',
                       style: TextStyle(
                         fontFamily: 'Poppins',

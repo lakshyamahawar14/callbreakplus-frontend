@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Button extends StatefulWidget {
   final Function()? onPressed;
   final String buttonText;
   final IconData icon;
 
-  const Button({Key? key, required this.buttonText, required this.icon, this.onPressed}) : super(key: key);
+  const Button({super.key, required this.buttonText, required this.icon, this.onPressed});
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -37,7 +36,7 @@ class _ButtonState extends State<Button> {
         });
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 9, horizontal: 9),
+        padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
         decoration: BoxDecoration(
           color: _isPressed ? Colors.grey[100] : Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -46,10 +45,10 @@ class _ButtonState extends State<Button> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(widget.icon, color: Colors.black, size: 18),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             Text(
               widget.buttonText,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
