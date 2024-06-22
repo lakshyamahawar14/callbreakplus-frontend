@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Links extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final VoidCallback? onTap;
+class LeaveButton extends StatelessWidget {
+  final Function()? onPressed;
 
-  const Links({required this.icon, required this.title, this.onTap});
+  const LeaveButton({Key? key, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onPressed,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        padding: const EdgeInsets.all(9),
+        padding: EdgeInsets.symmetric(vertical: 9, horizontal: 9),
         decoration: BoxDecoration(
-          color: Color(0xFFC0FFC0),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            FaIcon(icon, size: 18),
-            SizedBox(width: 10),
+            Icon(FontAwesomeIcons.arrowLeft, color: Colors.black, size: 18),
+            SizedBox(width: 5),
             Text(
-              title,
+              'Leave',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 18,

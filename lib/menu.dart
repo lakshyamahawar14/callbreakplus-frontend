@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'links.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/services.dart';
 
 class Menu extends StatelessWidget {
   @override
@@ -23,6 +24,9 @@ class Menu extends StatelessWidget {
         Links(
           icon: FontAwesomeIcons.users,
           title: 'Multiplayer',
+          onTap: () {
+            Navigator.pushNamed(context, '/multiplayer');
+          },
         ),
         Links(
           icon: FontAwesomeIcons.userFriends,
@@ -31,6 +35,13 @@ class Menu extends StatelessWidget {
         Links(
           icon: FontAwesomeIcons.cogs,
           title: 'Settings',
+        ),
+        Links(
+          icon: FontAwesomeIcons.signOutAlt,
+          title: 'Exit',
+          onTap: () {
+            SystemNavigator.pop();
+          },
         ),
       ],
     );

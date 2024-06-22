@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home.dart';
+import 'multiplayer.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,12 +19,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FullScreenWidget(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Home(),
-        ),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => FullScreenWidget(
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                body: HomePage(),
+              ),
+            ),
+        '/multiplayer': (context) => Multiplayer(),
+      },
     );
   }
 }
