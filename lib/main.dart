@@ -7,10 +7,8 @@ import 'local.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Ensure the app starts and remains in full-screen mode
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-  // Set preferred orientations to landscape
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft,
