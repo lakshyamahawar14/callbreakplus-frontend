@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'leave.dart';
-import 'card.dart';
-import 'join.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'button.dart';
+import 'constants.dart';
 
 class Local extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double cardWidth;
-    double cardHeight;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Color(0xFFE6E6FA),
+          color: AppColors.backgroundColor,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -27,8 +24,9 @@ class Local extends StatelessWidget {
                 children: [
                   Positioned(
                     left: 0,
-                    child: LeaveButton(
-                      leaveText: "Home",
+                    child: Button(
+                      icon: FontAwesomeIcons.arrowLeft,
+                      buttonText: "Home",
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -47,7 +45,6 @@ class Local extends StatelessWidget {
                 ],
               ),
             ),
-
             Expanded(
               child: Center(
                 child: Padding(
@@ -70,7 +67,9 @@ class Local extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
-                      JoinButton(
+                      Button(
+                        icon: FontAwesomeIcons.rightToBracket,
+                        buttonText: "Join",
                         onPressed: () {
                         },
                       ),
@@ -79,16 +78,31 @@ class Local extends StatelessWidget {
                 ),
               ),
             ),
-
             Container(
               height: MediaQuery.of(context).size.height * 0.2,
               child: Center(
-                child: Text(
-                  'Play with random people',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacementNamed('/multiplayer');
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Play with random people. ',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Click here',
+                          style: TextStyle(
+                            color: AppColors.linkColor,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

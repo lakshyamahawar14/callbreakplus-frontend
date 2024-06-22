@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'menu.dart';
+import 'constants.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -7,7 +8,7 @@ class HomePage extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Color(0xFFC0FFC0),
+        color: AppColors.backgroundColor,
       ),
       child: Row(
         children: [

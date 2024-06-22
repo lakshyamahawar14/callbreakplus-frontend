@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'leave.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'button.dart';
 import 'card.dart';
+import 'constants.dart';
 
 class Multiplayer extends StatelessWidget {
   @override
@@ -13,7 +15,7 @@ class Multiplayer extends StatelessWidget {
       body: Container(
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Color(0xFFFFE4E1),
+          color: AppColors.backgroundColor,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -26,8 +28,9 @@ class Multiplayer extends StatelessWidget {
                 children: [
                   Positioned(
                     left: 0,
-                    child: LeaveButton(
-                      leaveText: "Leave",
+                    child: Button(
+                      icon: FontAwesomeIcons.arrowLeft,
+                      buttonText: "Leave",
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -92,7 +95,7 @@ class Multiplayer extends StatelessWidget {
                         TextSpan(
                           text: 'Join here',
                           style: TextStyle(
-                            color: Colors.blue,
+                            color: AppColors.linkColor,
                           ),
                         ),
                       ],
