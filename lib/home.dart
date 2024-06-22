@@ -9,10 +9,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate the desired width of the container
     final double screenWidth = MediaQuery.of(context).size.width;
     final double menuWidth = 200;
-    final double containerWidth = screenWidth - menuWidth - 30; // Adjusted for only left margin
+    final double containerWidth = screenWidth - menuWidth - 30;
 
     return Container(
       margin: const EdgeInsets.all(10),
@@ -23,7 +22,7 @@ class HomePage extends StatelessWidget {
         children: [
           Container(
             width: menuWidth,
-            margin: const EdgeInsets.only(left: 10, top: 10, bottom: 10), // Removed right margin
+            margin: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -35,7 +34,7 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Colors.blue, // Blue background color
+              color: Colors.blue,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
@@ -55,7 +54,7 @@ class HomePage extends StatelessWidget {
                       color: Color(0xFFFEFFE3),
                     ),
                   ),
-                  const SizedBox(height: 20), // Space between the text and the text field
+                  const SizedBox(height: 20),
                   Container(
                     width: containerWidth * 0.5,
                     decoration: BoxDecoration(
@@ -75,7 +74,6 @@ class HomePage extends StatelessWidget {
                     icon: FontAwesomeIcons.rightToBracket,
                     buttonText: "Enter",
                     onPressed: () {
-                      // Add your onPressed logic here
                     },
                   ),
                 ],
