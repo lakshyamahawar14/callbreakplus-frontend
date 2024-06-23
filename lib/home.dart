@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   String playerName = '';
   String errorMessage = '';
-  String previousErrorMessage = '';
+  String successMessage = '';
 
   Future<Map<String, dynamic>> _createSession(String playerName) async {
     final url = Uri.parse('http://192.168.226.234:8080/api/session/create?name=$playerName');
@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
     if (inputText.isEmpty) {
       setState(() {
         errorMessage = "Please enter a name";
+        successMessage = '';
       });
       return;
     }
@@ -41,13 +42,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       if (response['status'] == 200) {
         playerName = response['data']['playerName'];
+        successMessage = 'Session created successfully!';
         errorMessage = '';
       } else {
-        String newErrorMessage = response['message'];
-        if (newErrorMessage != previousErrorMessage) {
-          errorMessage = newErrorMessage;
-          previousErrorMessage = newErrorMessage;
-        }
+        errorMessage = response['message'];
+        successMessage = '';
       }
     });
   }
@@ -150,23 +149,40 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Visibility(
+                  visible: successMessage.isNotEmpty,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 20), // Top margin added here
+                    constraints: BoxConstraints(
+                      maxWidth: containerWidth * 0.5,
+                    ),
+                    child: Status(
+                      text: successMessage,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+                Visibility(
                   visible: playerName.isNotEmpty,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w800,
-                      ),
-                      children: [
-                        TextSpan(text: 'Welcome, '),
-                        TextSpan(
-                          text: playerName,
-                          style: TextStyle(color: AppColors.greenColor),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
                         ),
-                        TextSpan(text: '!'),
-                      ],
+                        children: [
+                          TextSpan(text: 'Welcome, '),
+                          TextSpan(
+                            text: playerName,
+                            style: TextStyle(color: AppColors.greenColor),
+                          ),
+                          TextSpan(text: '!'),
+                        ],
+                      ),
                     ),
                   ),
                 ),
