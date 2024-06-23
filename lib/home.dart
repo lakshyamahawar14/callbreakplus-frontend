@@ -1,13 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'menu.dart';
 import 'constants.dart';
 import 'button.dart';
-import 'status.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -16,42 +16,46 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   String playerName = '';
-  bool showError = false;
+  String errorMessage = '';
+  String previousErrorMessage = '';
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  Future<Map<String, dynamic>> _createSession(String playerName) async {
+    final url = Uri.parse('http://192.168.226.234:8080/api/session/create?name=$playerName');
+    final response = await http.post(url);
+
+    return jsonDecode(response.body);
   }
 
-  Future<void> _setPlayerName() async {
+  void _setPlayerName() async {
+    String inputText = _controller.text.trim();
+
+    if (inputText.isEmpty) {
+      setState(() {
+        errorMessage = "Please enter a name";
+      });
+      return;
+    }
+
+    final response = await _createSession(inputText);
+
     setState(() {
-      playerName = _controller.text.trim();
-      if (playerName.isNotEmpty) {
-        showError = false;
-        _createSession(playerName); // Call the function to create a session
+      if (response['status'] == 200) {
+        playerName = response['data']['playerName'];
+        errorMessage = '';
       } else {
-        showError = true;
+        String newErrorMessage = response['message'];
+        if (newErrorMessage != previousErrorMessage) {
+          errorMessage = newErrorMessage;
+          previousErrorMessage = newErrorMessage;
+        }
       }
     });
-  }
-
-  Future<void> _createSession(String name) async {
-    final response = await http.post(
-      Uri.parse('http://localhost:8080/api/session/create?name=$name'),
-    );
-
-    if (response.statusCode == 200) {
-      print('Response data: ${response.body}');
-    } else {
-      print('Failed to create session');
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    const double menuWidth = 200;
+    final double menuWidth = 200;
     final double containerWidth = screenWidth - menuWidth - 30;
 
     return Container(
@@ -73,103 +77,134 @@ class _HomePageState extends State<HomePage> {
           Container(
             width: containerWidth,
             padding: const EdgeInsets.all(0),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
+            alignment: Alignment.topCenter,
+            decoration: BoxDecoration(
               color: Colors.blue,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
               ),
             ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
                     'Call Break Plus',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 32,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFFFEFFE3),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Visibility(
-                    visible: playerName.isEmpty,
-                    child: Container(
-                      width: containerWidth * 0.5,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextField(
-                        controller: _controller,
-                        onSubmitted: (_) => _setPlayerName(),
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Your Name',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(12),
+                      shadows: [
+                        Shadow(
+                          color: Colors.black,
+                          offset: Offset(0, 0),
+                          blurRadius: 2,
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: playerName.isEmpty,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 20, bottom: 20),
+                    width: containerWidth * 0.5,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: TextField(
+                      controller: _controller,
+                      onSubmitted: (_) => _setPlayerName(),
+                      decoration: InputDecoration(
+                        hintText: 'Enter Your Name',
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(12),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  Visibility(
-                    visible: playerName.isEmpty,
-                    child: Button(
-                      icon: FontAwesomeIcons.rightToBracket,
-                      buttonText: "Enter",
-                      onPressed: () {
-                        if (_controller.text.trim().isNotEmpty) {
-                          _setPlayerName();
-                        } else {
-                          setState(() {
-                            showError = true;
-                          });
-                        }
-                      },
+                ),
+                Visibility(
+                  visible: playerName.isEmpty,
+                  child: Button(
+                    icon: FontAwesomeIcons.rightToBracket,
+                    buttonText: "Enter",
+                    onPressed: _setPlayerName,
+                  ),
+                ),
+                Visibility(
+                  visible: errorMessage.isNotEmpty,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 20), // Top margin added here
+                    constraints: BoxConstraints(
+                      maxWidth: containerWidth * 0.5,
                     ),
-                  ),
-                  Visibility(
-                    visible: playerName.isEmpty && showError,
-                    child: const SizedBox(height: 10),
-                  ),
-                  Visibility(
-                    visible: playerName.isEmpty && showError,
-                    child: const Status(
-                      message: "*Please enter a valid name",
+                    child: Status(
+                      text: errorMessage,
                       color: AppColors.redColor,
                     ),
                   ),
-                  Visibility(
-                    visible: playerName.isNotEmpty,
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'Welcome, ',
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '$playerName!',
-                            style: const TextStyle(
-                              color: AppColors.greenColor,
-                            ),
-                          ),
-                        ],
+                ),
+                Visibility(
+                  visible: playerName.isNotEmpty,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 28,
+                        fontWeight: FontWeight.w800,
                       ),
+                      children: [
+                        TextSpan(text: 'Welcome, '),
+                        TextSpan(
+                          text: playerName,
+                          style: TextStyle(color: AppColors.greenColor),
+                        ),
+                        TextSpan(text: '!'),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class Status extends StatelessWidget {
+  final String text;
+  final Color color;
+
+  const Status({
+    Key? key,
+    required this.text,
+    required this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 12,
+          color: color,
+          fontWeight: FontWeight.w500,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }
