@@ -83,30 +83,7 @@ class Local extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.2,
               child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushReplacementNamed('/multiplayer');
-                  },
-                  child: RichText(
-                    text: const TextSpan(
-                      text: 'Play with random people. ',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Click here',
-                          style: TextStyle(
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                
               ),
             ),
           ],
