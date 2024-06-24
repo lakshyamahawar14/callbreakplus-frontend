@@ -27,7 +27,7 @@ class Links extends StatelessWidget {
               title,
               style: const TextStyle(
                 fontFamily: 'Poppins',
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),

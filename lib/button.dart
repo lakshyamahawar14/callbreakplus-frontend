@@ -50,7 +50,7 @@ class _ButtonState extends State<Button> {
               widget.buttonText,
               style: const TextStyle(
                 fontFamily: 'Poppins',
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),

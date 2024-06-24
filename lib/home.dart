@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                 if (!isLoggedIn)
                   Button(
                     icon: FontAwesomeIcons.rightToBracket,
-                    buttonText: "Enter",
+                    buttonText: "Sign In",
                     onPressed: _setPlayerName,
                   ),
                 if (isLoggedIn)
@@ -219,8 +219,8 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         margin: const EdgeInsets.only(top: 10),
                         child: Button(
-                          icon: FontAwesomeIcons.trash,
-                          buttonText: "Leave Server",
+                          icon: FontAwesomeIcons.signOutAlt,
+                          buttonText: "Log Out",
                           onPressed: _removePlayerName,
                         ),
                       ),

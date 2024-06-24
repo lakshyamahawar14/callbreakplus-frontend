@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'button.dart';
 import 'card.dart';
 import 'constants.dart';
+import 'onlineplayers.dart';
 
 class Multiplayer extends StatefulWidget {
   const Multiplayer({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _MultiplayerState extends State<Multiplayer> {
     final jsonResponse = jsonDecode(response.body);
     
     setState(() {
-      if(jsonResponse['status'] == 200){
+      if (jsonResponse['status'] == 200) {
         _roomId = jsonResponse['data']['roomId'];
       }
     });
@@ -135,7 +136,7 @@ class _MultiplayerState extends State<Multiplayer> {
                           ),
                           const Center(
                             child: Text(
-                              'Finding Room...',
+                              'Matchmaking...',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 24,
@@ -157,33 +158,25 @@ class _MultiplayerState extends State<Multiplayer> {
                             cardHeight = multiplayerHeight - 2 * 10;
 
                             List<Widget> playerCards = [];
-                            if (_otherPlayerNames.length >= 4) {
-                              for (int i = 0; i < 4; i++) {
-                                playerCards.add(CardWidget(
-                                  cardWidth: cardWidth,
-                                  cardHeight: cardHeight,
-                                  playerName: _otherPlayerNames[i],
-                                ));
-                                if (i < 3) {
-                                  playerCards.add(const SizedBox(width: 20));
-                                }
-                              }
-                            } else {
-                              for (int i = 0; i < _otherPlayerNames.length; i++) {
-                                playerCards.add(CardWidget(
-                                  cardWidth: cardWidth,
-                                  cardHeight: cardHeight,
-                                  playerName: _otherPlayerNames[i],
-                                ));
-                                if (i < _otherPlayerNames.length - 1) {
-                                  playerCards.add(const SizedBox(width: 20));
-                                }
+                            for (int i = 0; i < 4; i++) {
+                              playerCards.add(CardWidget(
+                                cardWidth: cardWidth,
+                                cardHeight: cardHeight,
+                                playerName: i < _otherPlayerNames.length ? _otherPlayerNames[i] : '',
+                              ));
+                              if (i < 3) {
+                                playerCards.add(const SizedBox(width: 20));
                               }
                             }
 
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: playerCards,
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                                child: Row(
+                                  children: playerCards,
+                                ),
+                              ),
                             );
                           },
                         ),
@@ -192,7 +185,7 @@ class _MultiplayerState extends State<Multiplayer> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.2,
                       child: Center(
-                        
+                        child: OnlinePlayers(),
                       ),
                     ),
                   ],

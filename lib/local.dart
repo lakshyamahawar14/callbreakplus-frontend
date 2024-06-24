@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'button.dart';
 import 'constants.dart';
+import 'onlinerooms.dart';
 
 class Local extends StatelessWidget {
   const Local({super.key});
@@ -83,7 +84,7 @@ class Local extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.2,
               child: Center(
-                
+                child: OnlineRooms(),
               ),
             ),
           ],
