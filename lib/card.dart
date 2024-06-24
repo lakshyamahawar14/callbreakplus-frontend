@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class CardWidget extends StatelessWidget {
   final double cardWidth;
   final double cardHeight;
+  final String playerName;
 
   const CardWidget({
-    super.key,
+    Key? key,
     required this.cardWidth,
     required this.cardHeight,
-  });
+    this.playerName = '',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,16 @@ class CardWidget extends StatelessWidget {
             offset: const Offset(0, 2),
           ),
         ],
+      ),
+      child: Center(
+        child: Text(
+          playerName,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }

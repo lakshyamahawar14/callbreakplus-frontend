@@ -9,7 +9,7 @@ import 'button.dart';
 import 'status.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -18,8 +18,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   String playerName = '';
-  String errorMessage = '';
-  String successMessage = '';
+  String statusMessage = '';
+  bool isLoggedIn = false;
+  Color statusColor = AppColors.redColor;
 
   @override
   void initState() {
@@ -31,23 +32,39 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       playerName = prefs.getString('playerName') ?? '';
+      isLoggedIn = playerName.isNotEmpty;
     });
   }
 
   Future<void> _savePlayerName(String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('playerName', name);
+    setState(() {
+      playerName = name;
+      isLoggedIn = true;
+    });
   }
 
   Future<void> _removePlayerName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('playerName');
-    setState(() {
-      playerName = '';
-      successMessage = '';
-      errorMessage = '';
-      _controller.clear();
-    });
+
+    String playerName = prefs.getString('playerName') ?? '';
+
+    final response = await _destroySession(playerName);
+
+    if (response['status'] == 200) {
+      await prefs.remove('playerName');
+      setState(() {
+        playerName = '';
+        isLoggedIn = false;
+        statusMessage = response['message'];
+        _controller.clear();
+      });
+    } else {
+      setState(() {
+        statusMessage = response['message'];
+      });
+    }
   }
 
   Future<Map<String, dynamic>> _createSession(String playerName) async {
@@ -57,13 +74,20 @@ class _HomePageState extends State<HomePage> {
     return jsonDecode(response.body);
   }
 
+  Future<Map<String, dynamic>> _destroySession(String playerName) async {
+    final url = Uri.parse('http://192.168.226.234:8080/api/session/destroy?name=$playerName');
+    final response = await http.get(url);
+
+    return jsonDecode(response.body);
+  }
+
   void _setPlayerName() async {
     String inputText = _controller.text.trim();
 
     if (inputText.isEmpty) {
       setState(() {
-        errorMessage = "Please enter a name";
-        successMessage = '';
+        statusMessage = "Please enter a name!";
+        statusColor = AppColors.redColor;
       });
       return;
     }
@@ -73,13 +97,14 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       if (response['status'] == 200) {
         playerName = response['data']['playerName'];
-        successMessage = 'Session created successfully!';
-        errorMessage = '';
+        statusMessage = response['message'];
         _savePlayerName(playerName);
       } else {
-        errorMessage = response['message'];
-        successMessage = '';
+        statusMessage = response['message'];
       }
+
+      bool isError = response['status'] != 200;
+      statusColor = isError ? AppColors.redColor : Colors.green;
     });
   }
 
@@ -132,9 +157,19 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: playerName.isEmpty,
-                  child: Container(
+                if (statusMessage.isNotEmpty)
+                  Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    constraints: BoxConstraints(
+                      maxWidth: containerWidth * 0.5,
+                    ),
+                    child: Status(
+                      text: statusMessage,
+                      color: statusColor,
+                    ),
+                  ),
+                if (!isLoggedIn)
+                  Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 20),
                     width: containerWidth * 0.5,
                     decoration: BoxDecoration(
@@ -151,48 +186,17 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                ),
-                Visibility(
-                  visible: playerName.isEmpty,
-                  child: Button(
+                if (!isLoggedIn)
+                  Button(
                     icon: FontAwesomeIcons.rightToBracket,
                     buttonText: "Enter",
                     onPressed: _setPlayerName,
                   ),
-                ),
-                Visibility(
-                  visible: errorMessage.isNotEmpty,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    constraints: BoxConstraints(
-                      maxWidth: containerWidth * 0.5,
-                    ),
-                    child: Status(
-                      text: errorMessage,
-                      color: AppColors.redColor,
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: successMessage.isNotEmpty,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    constraints: BoxConstraints(
-                      maxWidth: containerWidth * 0.5,
-                    ),
-                    child: Status(
-                      text: successMessage,
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: playerName.isNotEmpty,
-                  child: Column(
+                if (isLoggedIn)
+                  Column(
                     children: [
                       Container(
                         margin: const EdgeInsets.only(top: 10),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
@@ -216,13 +220,12 @@ class _HomePageState extends State<HomePage> {
                         margin: const EdgeInsets.only(top: 10),
                         child: Button(
                           icon: FontAwesomeIcons.trash,
-                          buttonText: "Remove Name",
+                          buttonText: "Leave Server",
                           onPressed: _removePlayerName,
                         ),
                       ),
                     ],
                   ),
-                ),
               ],
             ),
           ),
