@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
 
 class Status extends StatelessWidget {
-  final String message;
+  final String text;
   final Color color;
-  final double maxWidth;
 
   const Status({
-    Key? key,
-    required this.message,
+    super.key,
+    required this.text,
     required this.color,
-    required this.maxWidth,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
-      constraints: BoxConstraints(maxWidth: maxWidth),
       child: Text(
-        message,
+        text,
         style: TextStyle(
-          fontSize: 12,
+          fontSize: 16,
           color: color,
+          fontWeight: FontWeight.w600,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }
 }
+

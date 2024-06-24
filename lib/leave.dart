@@ -5,14 +5,14 @@ class LeaveButton extends StatelessWidget {
   final Function()? onPressed;
   final String leaveText;
 
-  const LeaveButton({Key? key, required this.leaveText, this.onPressed}) : super(key: key);
+  const LeaveButton({super.key, required this.leaveText, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 9, horizontal: 9),
+        padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -20,11 +20,11 @@ class LeaveButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(FontAwesomeIcons.arrowLeft, color: Colors.black, size: 18),
-            SizedBox(width: 5),
+            const Icon(FontAwesomeIcons.arrowLeft, color: Colors.black, size: 18),
+            const SizedBox(width: 5),
             Text(
               leaveText,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

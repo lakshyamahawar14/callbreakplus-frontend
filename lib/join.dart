@@ -4,19 +4,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class JoinButton extends StatelessWidget {
   final Function()? onPressed;
 
-  const JoinButton({Key? key, this.onPressed}) : super(key: key);
+  const JoinButton({super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 9, horizontal: 9),
+        padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Row(
+        child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(FontAwesomeIcons.rightToBracket, color: Colors.black, size: 18),

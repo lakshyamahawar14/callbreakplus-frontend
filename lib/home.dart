@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'menu.dart';
 import 'constants.dart';
 import 'button.dart';
+import 'status.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -18,6 +20,35 @@ class _HomePageState extends State<HomePage> {
   String playerName = '';
   String errorMessage = '';
   String successMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPlayerName();
+  }
+
+  Future<void> _loadPlayerName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      playerName = prefs.getString('playerName') ?? '';
+    });
+  }
+
+  Future<void> _savePlayerName(String name) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('playerName', name);
+  }
+
+  Future<void> _removePlayerName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('playerName');
+    setState(() {
+      playerName = '';
+      successMessage = '';
+      errorMessage = '';
+      _controller.clear();
+    });
+  }
 
   Future<Map<String, dynamic>> _createSession(String playerName) async {
     final url = Uri.parse('http://192.168.226.234:8080/api/session/create?name=$playerName');
@@ -44,6 +75,7 @@ class _HomePageState extends State<HomePage> {
         playerName = response['data']['playerName'];
         successMessage = 'Session created successfully!';
         errorMessage = '';
+        _savePlayerName(playerName);
       } else {
         errorMessage = response['message'];
         successMessage = '';
@@ -54,7 +86,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double menuWidth = 200;
+    const double menuWidth = 200;
     final double containerWidth = screenWidth - menuWidth - 30;
 
     return Container(
@@ -77,9 +109,9 @@ class _HomePageState extends State<HomePage> {
             width: containerWidth,
             padding: const EdgeInsets.all(0),
             alignment: Alignment.topCenter,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 bottomLeft: Radius.circular(10),
               ),
@@ -87,9 +119,9 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
+                const SizedBox(height: 10),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
                     'Call Break Plus',
                     style: TextStyle(
@@ -97,20 +129,13 @@ class _HomePageState extends State<HomePage> {
                       fontSize: 32,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFFFEFFE3),
-                      shadows: [
-                        Shadow(
-                          color: Colors.black,
-                          offset: Offset(0, 0),
-                          blurRadius: 2,
-                        ),
-                      ],
                     ),
                   ),
                 ),
                 Visibility(
                   visible: playerName.isEmpty,
                   child: Container(
-                    margin: const EdgeInsets.only(top: 20, bottom: 20),
+                    margin: const EdgeInsets.only(top: 10, bottom: 20),
                     width: containerWidth * 0.5,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -119,10 +144,10 @@ class _HomePageState extends State<HomePage> {
                     child: TextField(
                       controller: _controller,
                       onSubmitted: (_) => _setPlayerName(),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Enter Your Name',
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.all(12),
+                        contentPadding: EdgeInsets.all(12),
                       ),
                     ),
                   ),
@@ -138,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                 Visibility(
                   visible: errorMessage.isNotEmpty,
                   child: Container(
-                    margin: const EdgeInsets.only(top: 20), // Top margin added here
+                    margin: const EdgeInsets.only(top: 20),
                     constraints: BoxConstraints(
                       maxWidth: containerWidth * 0.5,
                     ),
@@ -151,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                 Visibility(
                   visible: successMessage.isNotEmpty,
                   child: Container(
-                    margin: const EdgeInsets.only(top: 20), // Top margin added here
+                    margin: const EdgeInsets.only(top: 10),
                     constraints: BoxConstraints(
                       maxWidth: containerWidth * 0.5,
                     ),
@@ -163,64 +188,45 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Visibility(
                   visible: playerName.isNotEmpty,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        children: [
-                          TextSpan(text: 'Welcome, '),
-                          TextSpan(
-                            text: playerName,
-                            style: TextStyle(color: AppColors.greenColor),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 28,
+                              fontWeight: FontWeight.w800,
+                            ),
+                            children: [
+                              const TextSpan(text: 'Welcome, '),
+                              TextSpan(
+                                text: playerName,
+                                style: const TextStyle(color: AppColors.greenColor),
+                              ),
+                              const TextSpan(text: '!'),
+                            ],
                           ),
-                          TextSpan(text: '!'),
-                        ],
+                        ),
                       ),
-                    ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: Button(
+                          icon: FontAwesomeIcons.trash,
+                          buttonText: "Remove Name",
+                          onPressed: _removePlayerName,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class Status extends StatelessWidget {
-  final String text;
-  final Color color;
-
-  const Status({
-    Key? key,
-    required this.text,
-    required this.color,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 12,
-          color: color,
-          fontWeight: FontWeight.w500,
-        ),
-        textAlign: TextAlign.center,
       ),
     );
   }
